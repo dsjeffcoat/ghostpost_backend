@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class GhostPost(models.Model):
     is_boast = models.BooleanField(default=True)
-    post = models.CharField(max_length=280)
+    post = models.CharField(max_length=280, null=True, blank=True)
     upvote = models.IntegerField(default=0)
     downvote = models.IntegerField(default=0)
     time_submitted = models.DateTimeField(default=timezone.now)

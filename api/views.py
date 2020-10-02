@@ -4,6 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .serializers import GhostPostSerializer
 from .models import GhostPost
+import string
+import random
 
 # Create your views here.
 
@@ -36,12 +38,24 @@ class GhostPostViewSet(viewsets.ModelViewSet):
 
     # TODO: HELP! This particular extra action is not working properly!
 
-    # @action(detail=True, methods=['post'])
-    # def upvote(self, request, pk=None):
-    #     serializer = GhostPostSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         .upvote += 1
-    #         post.save()
-    #         return Response({'status': 'Vote is now entered'})
-    #     else:
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=True, methods=['post'])
+    def upvote(self, request, pk=None):
+        post = self.get_object()
+        serializer = GhostPostSerializer(data=request.data)
+        if serializer.is_valid():
+            post.upvote += 1
+            post.save()
+            return Response({'status': 'Vote is now entered'})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'])
+    def downvote(self, request, pk=None):
+        post = self.get_object()
+        serializer = GhostPostSerializer(data=request.data)
+        if serializer.is_valid():
+            post.downvote += 1
+            post.save()
+            return Response({'status': 'Vote is now entered'})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
