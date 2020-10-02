@@ -17,14 +17,14 @@ class GhostPostViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def boasts(self, request):
         boasts = GhostPost.objects.filter(
-            is_boast=True).order_by('-time_submitted')
+            is_boast=0).order_by('-time_submitted')
         serializer = self.get_serializer(boasts, many=True)
         return Response(serializer.data)
 
     @action(detail=False)
     def roasts(self, request):
         roasts = GhostPost.objects.filter(
-            is_boast=False).order_by('-time_submitted')
+            is_boast=1).order_by('-time_submitted')
         serializer = self.get_serializer(roasts, many=True)
         return Response(serializer.data)
 

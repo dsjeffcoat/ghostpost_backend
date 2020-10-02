@@ -5,7 +5,13 @@ from django.utils import timezone
 
 
 class GhostPost(models.Model):
-    is_boast = models.BooleanField(default=True)
+    BOAST_OR_ROAST = (
+        ('Boast', 'Boast'),
+        ('Roast', 'Roast'),
+    )
+
+    is_boast = models.CharField(
+        max_length=5, choices=BOAST_OR_ROAST)
     post = models.CharField(max_length=280, null=True, blank=True)
     upvote = models.IntegerField(default=0)
     downvote = models.IntegerField(default=0)

@@ -8,5 +8,5 @@ class GhostPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GhostPost
-        fields = ['is_boast', 'post', 'total_score',
+        fields = ['id', 'is_boast', 'post', 'total_score',
                   'upvote', 'downvote', 'time_submitted']
