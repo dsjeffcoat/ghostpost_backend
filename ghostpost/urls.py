@@ -23,5 +23,7 @@ router.register(r"posts", api_views.GhostPostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('csrf/', api_views.csrf),
+    path('ping/', api_views.ping),
     path('api/', include(router.urls)),
 ]

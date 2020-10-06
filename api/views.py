@@ -6,25 +6,35 @@ from .serializers import GhostPostSerializer
 from .models import GhostPost
 import string
 import random
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 # Create your views here.
 
 
+def csrf(request):
+    return JsonResponse({'csrfToken': get_token(request)})
+
+
+def ping(request):
+    return JsonResponse({'result': 'OK'})
+
+
 class GhostPostViewSet(viewsets.ModelViewSet):
-    queryset = GhostPost.objects.all()
+    queryset = GhostPost.objects.all().order_by('-time_submitted')
     serializer_class = GhostPostSerializer
 
     @action(detail=False)
     def boasts(self, request):
         boasts = GhostPost.objects.filter(
-            is_boast=0).order_by('-time_submitted')
+            is_boast='Boast').order_by('-time_submitted')
         serializer = self.get_serializer(boasts, many=True)
         return Response(serializer.data)
 
     @action(detail=False)
     def roasts(self, request):
         roasts = GhostPost.objects.filter(
-            is_boast=1).order_by('-time_submitted')
+            is_boast='Roast').order_by('-time_submitted')
         serializer = self.get_serializer(roasts, many=True)
         return Response(serializer.data)
 
@@ -38,7 +48,7 @@ class GhostPostViewSet(viewsets.ModelViewSet):
 
     # TODO: HELP! This particular extra action is not working properly!
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post', 'get'])
     def upvote(self, request, pk=None):
         post = self.get_object()
         serializer = GhostPostSerializer(data=request.data)
@@ -49,7 +59,7 @@ class GhostPostViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post', 'get'])
     def downvote(self, request, pk=None):
         post = self.get_object()
         serializer = GhostPostSerializer(data=request.data)
